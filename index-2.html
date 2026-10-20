@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Survei Persepsi Pengguna terhadap Merek Skincare</title>
+<meta name="description" content="Survei akademik singkat tentang persepsi pengguna terhadap merek skincare. Sekitar 5 menit.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#FDEBF1">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8C%B8%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600&family=Instrument+Serif&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FDEBF1;        /* pink muda (warna utama) */
+  --white:#FFFFFF;     /* putih (warna sekunder) */
+  --soft:#FFF6F9;      /* putih kemerahan untuk input */
+  --ink:#3B2530;
+  --ink-2:#7B6068;
+  --line:#F3D5DF;
+  --dew:#FAD9E5;
+  --accent:#B84A70;
+  --accent-d:#9C3A5C;
+  --alert:#B3261E;
+  --serif:'Instrument Serif',Georgia,'Times New Roman',serif;
+  --sans:'Figtree',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:var(--sans);font-size:17px;line-height:1.65;color:var(--ink);
+  background:var(--bg);min-height:100vh;-webkit-font-smoothing:antialiased;
+}
+[hidden]{display:none!important}
+h1,h2{font-family:var(--serif);font-weight:400;letter-spacing:-.012em;color:var(--ink);outline:none}
+h1{font-size:clamp(2.7rem,8vw,4.9rem);line-height:1.02}
+h2{font-size:clamp(2rem,5vw,2.7rem);line-height:1.1}
+.lead{color:var(--ink-2);margin-top:14px;max-width:56ch}
+
+/* progress */
+.progress{position:fixed;inset:0 0 auto 0;height:3px;background:transparent;z-index:20}
+.progress span{display:block;height:100%;width:0;background:var(--accent);transition:width .5s ease}
+.page{max-width:1040px;margin:0 auto;padding:clamp(22px,5vw,60px)}
+.narrow{max-width:640px}
+.stepline{color:var(--ink-2);font-size:.92rem;margin-bottom:22px}
+
+/* landing */
+.hero{display:grid;gap:36px;align-items:center;min-height:calc(100svh - 2*clamp(22px,5vw,60px))}
+.orb-wrap{display:grid;place-items:center;order:-1}
+.orb{
+  width:clamp(120px,34vw,360px);aspect-ratio:1;border-radius:50%;position:relative;
+  background:
+    radial-gradient(circle at 31% 27%,rgba(255,255,255,.95) 0 5%,rgba(255,255,255,0) 6.5%),
+    radial-gradient(circle at 36% 31%,#FFF4F8 0%,#FAD0DE 36%,#F1A1BA 74%,#B84A70 100%);
+  box-shadow:inset -22px -28px 56px rgba(156,58,92,.28),0 44px 80px -36px rgba(184,74,112,.55);
+  animation:rise 1.1s cubic-bezier(.2,.7,.2,1) both;
+}
+.orb::after{content:"";position:absolute;inset:-14%;border:1px solid var(--line);border-radius:50%}
+@keyframes rise{from{opacity:0;transform:translateY(26px) scale(.96)}to{opacity:1;transform:none}}
+.hero-copy .lead{font-size:1.08rem;margin-top:22px}
+.facts{list-style:none;margin:30px 0 34px;max-width:46ch}
+.facts li{padding:11px 0;border-top:1px solid var(--line);color:var(--ink-2);font-size:.97rem}
+.facts li:last-child{border-bottom:1px solid var(--line)}
+.credit{margin-top:26px;font-size:.88rem;color:var(--ink-2);max-width:52ch}
+@media(min-width:860px){
+  .hero{grid-template-columns:1.1fr .9fr;gap:64px}
+  .orb-wrap{order:0}
+}
+
+/* form */
+.group{margin-top:34px}
+.q-title{font-weight:600;margin-bottom:12px}
+.field label.lbl{display:block;font-weight:600;margin-bottom:8px}
+.hint{color:var(--ink-2);font-size:.92rem;margin-top:8px}
+input[type=text]{
+  width:100%;font:inherit;color:var(--ink);padding:14px 16px;border:1px solid var(--line);
+  border-radius:14px;background:var(--soft);transition:border-color .2s,box-shadow .2s;
+}
+input[type=text]:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px var(--dew)}
+.opts{display:flex;flex-wrap:wrap;gap:10px}
+.opts.stack{flex-direction:column;align-items:stretch}
+.opt{position:relative;display:block}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt span{
+  display:inline-block;padding:11px 20px;border:1px solid var(--line);border-radius:999px;
+  background:var(--soft);cursor:pointer;transition:background .2s,border-color .2s,color .2s;
+}
+.opts.stack .opt span{display:block;border-radius:16px;padding:14px 18px}
+.opt:hover span{border-color:var(--accent)}
+.opt input:checked+span{background:var(--accent);border-color:var(--accent);color:#fff}
+.opt input:focus-visible+span{outline:3px solid var(--accent);outline-offset:2px}
+.check{display:flex;gap:12px;align-items:flex-start;cursor:pointer}
+.check input{width:20px;height:20px;margin-top:4px;accent-color:var(--accent);flex:none}
+.check span{color:var(--ink-2);font-size:.96rem}
+.error{color:var(--alert);font-size:.92rem;margin-top:8px}
+.error:empty{display:none}
+
+/* likert */
+.legend{color:var(--ink-2);font-size:.92rem;margin-top:10px}
+#likert-body{margin-top:26px}
+.q{padding:26px 0;border-top:1px solid var(--line);border:0;border-top:1px solid var(--line)}
+.q:last-child{border-bottom:1px solid var(--line)}
+.q.invalid{box-shadow:inset 3px 0 0 var(--alert);padding-left:16px}
+.q legend{display:flex;gap:14px;font-weight:500;padding:0;float:left;width:100%}
+.q legend+*{clear:both}
+.qn{color:var(--ink-2);min-width:1.7em;font-variant-numeric:tabular-nums;font-weight:400}
+.scale{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:18px 0 0 calc(1.7em + 14px);max-width:440px}
+.dot{display:grid;justify-items:center;gap:6px;cursor:pointer;position:relative}
+.dot input{position:absolute;opacity:0;pointer-events:none}
+.dot .c{
+  width:46px;height:46px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--line);
+  background:var(--soft);font-weight:500;transition:background .2s,border-color .2s,color .2s;
+}
+.dot:hover .c{border-color:var(--accent)}
+.dot input:checked+.c{background:var(--accent);border-color:var(--accent);color:#fff}
+.dot input:focus-visible+.c{outline:3px solid var(--accent);outline-offset:2px}
+.cap{display:none;font-size:.72rem;line-height:1.2;color:var(--ink-2);text-align:center}
+.ends{display:flex;justify-content:space-between;margin:8px 0 0 calc(1.7em + 14px);max-width:440px;font-size:.8rem;color:var(--ink-2)}
+@media(min-width:640px){.cap{display:block}.ends{display:none}}
+
+/* buttons */
+.actions{display:flex;gap:12px;justify-content:space-between;flex-wrap:wrap;margin-top:40px}
+.btn{
+  font:inherit;font-weight:600;border:1px solid var(--accent);border-radius:999px;padding:15px 32px;
+  background:var(--accent);color:#fff;cursor:pointer;transition:background .2s,transform .2s;
+}
+.btn:hover{background:var(--accent-d)}
+.btn:active{transform:translateY(1px)}
+.btn:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn.ghost:hover{border-color:var(--accent);background:transparent}
+.btn[disabled]{opacity:.65;cursor:progress}
+.actions .btn:only-child{margin-left:auto}
+
+/* modal */
+.overlay{position:fixed;inset:0;background:rgba(59,37,48,.45);display:grid;place-items:center;padding:20px;z-index:50}
+.modal{background:var(--white);border-radius:26px;padding:34px 30px 30px;max-width:420px;width:100%;box-shadow:0 30px 80px -20px rgba(59,37,48,.4)}
+.modal h3{font-family:var(--serif);font-weight:400;font-size:1.8rem;line-height:1.15;margin-bottom:10px}
+.modal p{color:var(--ink-2);margin-bottom:24px}
+
+
+/* kartu putih untuk langkah-langkah form */
+.step.narrow{background:var(--white);border-radius:28px;padding:clamp(24px,5vw,46px);box-shadow:0 28px 70px -40px rgba(184,74,112,.45)}
+
+/* logo merek */
+.brands{margin:0 0 30px}
+.brands-lbl{display:block;font-size:.82rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);margin-bottom:12px}
+.brand-row{display:flex;flex-wrap:wrap;gap:10px}
+.brand-chip{background:var(--white);border:1px solid var(--line);border-radius:999px;height:58px;min-width:118px;padding:0 22px;display:grid;place-items:center}
+.brand-logo{display:block;max-height:28px;max-width:110px;width:auto;height:auto;object-fit:contain}
+.wordmark{font-family:var(--serif);font-size:1.3rem;line-height:1;color:var(--ink)}
+.likert-brand{margin-bottom:18px}
+.likert-brand .brand-chip{display:inline-grid}
+
+/* honeypot */
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+
+.final{padding-top:12vh}
+@media(prefers-reduced-motion:reduce){
+  .orb{animation:none}
+  .progress span,.btn,.opt span,.dot .c,input[type=text]{transition:none}
+}
+</style>
+</head>
+<body>
+
+<div class="progress" aria-hidden="true"><span id="bar"></span></div>
+
+<main class="page">
+
+  <!-- Halaman depan -->
+  <section id="landing" class="step hero">
+    <div class="hero-copy">
+      <h1 tabindex="-1">Persepsi pengguna terhadap merek skincare</h1>
+      <p class="lead">Kuesioner ini merupakan bagian dari penelitian akademik saya mengenai persepsi pengguna terhadap merek skincare Skintific, Somethinc, dan Avoskin, yang mencakup kesadaran merek, asosiasi merek, kualitas yang dirasakan, dan loyalitas merek. Saya mengundang Anda untuk berpartisipasi sebagai responden. Tidak ada jawaban benar atau salah, mohon isi sesuai pengalaman Anda yang sebenarnya.</p>
+      <ul class="facts">
+        <li>Estimasi waktu pengisian sekitar 5 menit</li>
+        <li>Partisipasi bersifat sukarela dan Anda dapat berhenti kapan saja. Data hanya digunakan untuk keperluan penelitian</li>
+        <li>Untuk pengguna Skintific, Somethinc, atau Avoskin dalam 6 bulan terakhir</li>
+      </ul>
+      <div class="brands">
+        <span class="brands-lbl">Merek yang diteliti</span>
+        <div class="brand-row" id="brand-row"></div>
+      </div>
+      <button type="button" class="btn" data-action="start">Mulai kuesioner</button>
+      <p class="credit">Penelitian oleh Devita Sari Irianti, Program Studi Manajemen, Universitas Terbuka. Jawaban hanya dipakai untuk keperluan akademik.</p>
+    </div>
+    <div class="orb-wrap" aria-hidden="true"><div class="orb"></div></div>
+  </section>
+
+  <!-- Langkah 1: identitas -->
+  <section id="identity" class="step narrow" hidden>
+    <p class="stepline" data-stepline></p>
+    <h2 tabindex="-1">Identitas singkat</h2>
+    <p class="lead">Nama Anda hanya dipakai peneliti untuk memeriksa data ganda dan tidak akan dipublikasikan.</p>
+
+    <div class="group field">
+      <label class="lbl" for="nama">Nama Anda</label>
+      <input type="text" id="nama" maxlength="80" autocomplete="name" placeholder="Nama lengkap, inisial, atau nama panggilan">
+      <p class="error" id="err-nama" role="alert"></p>
+    </div>
+
+    <div id="mount-usia"></div>
+
+    <div class="group">
+      <label class="check">
+        <input type="checkbox" id="consent">
+        <span>Saya memahami tujuan penelitian ini dan bersedia berpartisipasi secara sukarela.</span>
+      </label>
+      <p class="error" id="err-consent" role="alert"></p>
+    </div>
+
+    <div class="hp" aria-hidden="true"><label>Website<input type="text" id="hp" tabindex="-1" autocomplete="off"></label></div>
+
+    <div class="actions">
+      <button type="button" class="btn" data-action="identity-next">Lanjut</button>
+    </div>
+  </section>
+
+  <!-- Langkah 2: penyaring -->
+  <section id="screen" class="step narrow" hidden>
+    <p class="stepline" data-stepline></p>
+    <h2 tabindex="-1">Pengalaman memakai skincare</h2>
+    <p class="lead">Dua pertanyaan ini memastikan survei sesuai dengan Anda.</p>
+    <div id="mount-domisili"></div>
+    <div id="mount-merek"></div>
+    <div class="actions">
+      <button type="button" class="btn ghost" data-action="screen-back">Kembali</button>
+      <button type="button" class="btn" data-action="screen-next">Lanjut</button>
+    </div>
+  </section>
+
+  <!-- Langkah 3-5: penilaian merek -->
+  <section id="likert" class="step narrow" hidden>
+    <p class="stepline" data-stepline></p>
+    <div class="likert-brand" id="likert-brand"></div>
+    <h2 tabindex="-1" id="likert-title"></h2>
+    <p class="lead" id="likert-lead"></p>
+    <p class="legend">Skala 1 sampai 5: 1 berarti sangat tidak setuju, 5 berarti sangat setuju.</p>
+    <div id="likert-body"></div>
+    <p class="error" id="err-likert" role="alert"></p>
+    <div class="actions">
+      <button type="button" class="btn ghost" data-action="likert-back">Kembali</button>
+      <button type="button" class="btn" data-action="likert-next">Lanjut</button>
+    </div>
+  </section>
+
+  <!-- Langkah 6: profil -->
+  <section id="profile" class="step narrow" hidden>
+    <p class="stepline" data-stepline></p>
+    <h2 tabindex="-1">Profil responden</h2>
+    <p class="lead">Tinggal satu langkah lagi.</p>
+    <div id="mount-profile"></div>
+    <p class="error" id="err-submit" role="alert"></p>
+    <div class="actions">
+      <button type="button" class="btn ghost" data-action="profile-back">Kembali</button>
+      <button type="button" class="btn" id="submit-btn" data-action="submit">Kirim kuesioner</button>
+    </div>
+  </section>
+
+  <!-- Selesai -->
+  <section id="done" class="step narrow final" hidden>
+    <h2 tabindex="-1">Terima kasih</h2>
+    <p class="lead">Jawaban Anda sudah terkirim dan sangat membantu penelitian ini. Anda boleh menutup halaman ini.</p>
+  </section>
+
+  <!-- Tidak memenuhi syarat -->
+  <section id="ended" class="step narrow final" hidden>
+    <h2 tabindex="-1">Terima kasih atas minat Anda</h2>
+    <p class="lead">Kuesioner ini khusus untuk pengguna Skintific, Somethinc, atau Avoskin dalam 6 bulan terakhir. Jawaban Anda tidak disimpan.</p>
+  </section>
+
+</main>
+
+<div class="overlay" id="overlay" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="m-title" aria-describedby="m-text">
+    <h3 id="m-title"></h3>
+    <p id="m-text"></p>
+    <button type="button" class="btn" id="m-btn">Mengerti</button>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ============ PENGATURAN ============ */
+  // Tempel URL Web App dari Google Apps Script (berakhiran /exec) di sini.
+  var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz6MAlehtcShV-d7suxUH1ropto6aTPCOzzEdHqLYa23cU8XUKanmtvkuIyAKA7UmJH/exec';
+
+  var BRANDS = ['Skintific', 'Somethinc', 'Avoskin'];
+  var NONE_OPTION = 'Saya tidak memakai ketiga merek tersebut dalam 6 bulan terakhir';
+  var PAGE_SIZES = [6, 6, 5];            // 17 pernyataan dibagi ke 3 halaman
+  var TOTAL_STEPS = 6;
+  var CAPS = ['Sangat tidak setuju', 'Tidak setuju', 'Netral', 'Setuju', 'Sangat setuju'];
+
+  // 16 butir (4 dimensi x 4) + 1 butir cek perhatian. {M} diganti nama merek.
+  var STATEMENTS = [
+    { code: 'BA1', t: 'Saya dapat dengan mudah mengenali {M} di antara merek skincare lainnya.' },
+    { code: 'BA2', t: 'Ketika memikirkan produk skincare, {M} termasuk merek yang langsung terlintas di pikiran saya.' },
+    { code: 'BA3', t: 'Saya dapat mengingat dengan jelas tampilan logo atau kemasan {M}.' },
+    { code: 'BA4', t: 'Beberapa ciri khas {M} cepat terlintas di pikiran saya.' },
+    { code: 'AS1', t: 'Saya memiliki kesan yang jelas tentang {M} (misalnya ilmiah, lokal berkualitas, atau ramah lingkungan).' },
+    { code: 'AS2', t: 'Saya memiliki gambaran yang jelas tentang tipe orang yang menggunakan {M}.' },
+    { code: 'AS3', t: 'Saya percaya pada perusahaan yang membuat {M}.' },
+    { code: 'AS4', t: '{M} memiliki keunikan yang tidak dimiliki merek skincare lainnya.' },
+    { code: 'PQ1', t: 'Kualitas produk {M} sangat baik.' },
+    { code: 'PQ2', t: 'Produk {M} memberikan hasil yang konsisten setiap kali saya memakainya.' },
+    { code: 'PQ3', t: 'Produk {M} dapat diandalkan karena aman dan sesuai dengan klaimnya.' },
+    { code: 'PQ4', t: 'Produk {M} sangat mungkin berfungsi dengan baik sesuai kegunaannya.' },
+    { code: 'BL1', t: 'Saya merasa setia pada {M}.' },
+    { code: 'BL2', t: '{M} akan menjadi pilihan pertama saya ketika membeli skincare.' },
+    { code: 'BL3', t: 'Saya tetap memilih {M} meskipun ada merek skincare lain yang sedang ramai dibicarakan di media sosial.' },
+    { code: 'BL4', t: 'Saya berniat membeli kembali produk {M}.' },
+    { code: 'AC',  t: 'Untuk memastikan Anda membaca dengan teliti, mohon pilih \u201CSetuju\u201D (4) pada pernyataan ini.' }
+  ];
+
+  var PROFILE = [
+    { code: 'P1', q: 'Jenis kelamin', opts: ['Perempuan', 'Laki-laki', 'Memilih tidak menjawab'] },
+    { code: 'P2', q: 'Pendidikan terakhir', opts: ['SMA/sederajat', 'Diploma', 'Sarjana (S1)', 'Pascasarjana', 'Lainnya'] },
+    { code: 'P3', q: 'Pekerjaan', opts: ['Pelajar/mahasiswa', 'Karyawan swasta', 'PNS/BUMN', 'Wiraswasta', 'Belum/tidak bekerja', 'Lainnya'] },
+    { code: 'P4', q: 'Rata-rata pengeluaran Anda untuk skincare per bulan', opts: ['Kurang dari Rp100.000', 'Rp100.000 \u2013 Rp300.000', 'Rp300.001 \u2013 Rp500.000', 'Lebih dari Rp500.000'] },
+    { code: 'P5', q: 'Sudah berapa lama Anda memakai merek yang Anda nilai tadi?', opts: ['Kurang dari 3 bulan', '3\u20136 bulan', '7\u201312 bulan', 'Lebih dari 12 bulan'] },
+    { code: 'P6', q: 'Dari mana Anda pertama kali mengetahui merek tersebut?', opts: ['Media sosial (TikTok, Instagram, dll.)', 'E-commerce', 'Teman atau keluarga', 'Toko fisik', 'Iklan atau endorser', 'Lainnya'] }
+  ];
+
+  /* ============ LOGO MEREK ============ */
+  // File logo: assets/logos/skintific.(png|svg|webp|jpg), somethinc.*, avoskin.*
+  // Jika file tidak ada, otomatis tampil nama merek sebagai teks.
+  var LOGO_EXTS = ['png', 'svg', 'webp', 'jpg'];
+  function logoSrc(key, i) { return 'assets/logos/' + key + '.' + LOGO_EXTS[i]; }
+  function logoImg(brand) {
+    var key = brand.toLowerCase();
+    return '<img class="brand-logo" data-brand="' + key + '" data-name="' + esc(brand) + '" data-try="0" src="' + logoSrc(key, 0) + '" alt="' + esc(brand) + '">';
+  }
+  document.addEventListener('error', function (e) {
+    var img = e.target;
+    if (!img || img.tagName !== 'IMG' || !img.classList.contains('brand-logo')) return;
+    var n = parseInt(img.getAttribute('data-try'), 10) + 1;
+    if (n < LOGO_EXTS.length) {
+      img.setAttribute('data-try', n);
+      img.src = logoSrc(img.getAttribute('data-brand'), n);
+    } else {
+      var w = document.createElement('span');
+      w.className = 'wordmark';
+      w.textContent = img.getAttribute('data-name');
+      img.replaceWith(w);
+    }
+  }, true);
+
+  /* ============ UTIL ============ */
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var esc = function (s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  };
+  function shuffle(a) {
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+  function uid() {
+    if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+    return Date.now().toString(36) + Math.random().toString(16).slice(2, 12);
+  }
+  function setErr(id, msg) { var el = $('#err-' + id); if (el) el.textContent = msg || ''; }
+
+  /* ============ STATE ============ */
+  var state = {
+    nama: '', usia: '', domisili: '', merek: '',
+    answers: {}, profil: {}, order: null, page: 0,
+    started: null, sent: false
+  };
+  var current = 'landing';
+
+  /* ============ RENDER GRUP PILIHAN ============ */
+  function group(name, title, opts, stack) {
+    return '<div class="group" id="grp-' + name + '">' +
+      '<p class="q-title" id="lbl-' + name + '">' + esc(title) + '</p>' +
+      '<div class="opts' + (stack ? ' stack' : '') + '" role="radiogroup" aria-labelledby="lbl-' + name + '">' +
+      opts.map(function (o) {
+        return '<label class="opt"><input type="radio" name="' + name + '" value="' + esc(o) + '"><span>' + esc(o) + '</span></label>';
+      }).join('') +
+      '</div><p class="error" id="err-' + name + '" role="alert"></p></div>';
+  }
+
+  $('#mount-usia').innerHTML = group('usia', 'Apakah usia Anda 17 tahun ke atas?', ['Ya', 'Tidak']);
+  $('#mount-domisili').innerHTML = group('domisili', 'Apakah Anda saat ini berdomisili di Indonesia?', ['Ya', 'Tidak']);
+  $('#mount-merek').innerHTML = group(
+    'merek',
+    'Dalam 6 bulan terakhir, produk skincare dari merek manakah yang paling sering Anda beli dan pakai sendiri? Jika frekuensinya sama, pilih yang paling baru Anda pakai.',
+    BRANDS.concat([NONE_OPTION]), true
+  );
+  $('#mount-profile').innerHTML = PROFILE.map(function (p) { return group(p.code, p.q, p.opts); }).join('');
+
+  $('#brand-row').innerHTML = BRANDS.map(function (b) { return '<div class="brand-chip">' + logoImg(b) + '</div>'; }).join('');
+
+  /* ============ LANGKAH & PROGRESS ============ */
+  function position() {
+    if (current === 'identity') return 1;
+    if (current === 'screen') return 2;
+    if (current === 'likert') return 3 + state.page;
+    if (current === 'profile') return 6;
+    return 0;
+  }
+  function updateProgress() {
+    var p = position();
+    $('#bar').style.width = p ? (p / TOTAL_STEPS * 100) + '%' : '0';
+    $$('[data-stepline]').forEach(function (el) { el.textContent = p ? 'Langkah ' + p + ' dari ' + TOTAL_STEPS : ''; });
+  }
+  function show(id) {
+    current = id;
+    $$('.step').forEach(function (s) { s.hidden = s.id !== id; });
+    updateProgress();
+    window.scrollTo(0, 0);
+    var h = $('#' + id + ' h1, #' + id + ' h2');
+    if (h) h.focus({ preventScroll: true });
+  }
+
+  /* ============ MODAL ============ */
+  var modalCb = null, lastFocus = null;
+  function openModal(title, text, btn, cb) {
+    lastFocus = document.activeElement;
+    modalCb = cb || null;
+    $('#m-title').textContent = title;
+    $('#m-text').textContent = text;
+    $('#m-btn').textContent = btn || 'Mengerti';
+    $('#overlay').hidden = false;
+    $('#m-btn').focus();
+  }
+  function closeModal() {
+    $('#overlay').hidden = true;
+    var cb = modalCb; modalCb = null;
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+    if (cb) cb();
+  }
+  $('#m-btn').addEventListener('click', closeModal);
+  document.addEventListener('keydown', function (e) {
+    if ($('#overlay').hidden) return;
+    if (e.key === 'Escape') closeModal();
+    if (e.key === 'Tab') { e.preventDefault(); $('#m-btn').focus(); }
+  });
+
+  function clearRadios(name) {
+    $$('input[name="' + name + '"]').forEach(function (r) { r.checked = false; });
+  }
+
+  /* ============ LIKERT ============ */
+  function pageStart() {
+    return PAGE_SIZES.slice(0, state.page).reduce(function (a, b) { return a + b; }, 0);
+  }
+  function qHTML(s, n) {
+    var text = esc(s.t.replace(/\{M\}/g, state.merek));
+    var picked = state.answers[s.code];
+    var dots = [1, 2, 3, 4, 5].map(function (v) {
+      return '<label class="dot"><input type="radio" name="L-' + s.code + '" value="' + v + '"' + (picked === v ? ' checked' : '') + '>' +
+        '<span class="c">' + v + '</span><span class="cap">' + CAPS[v - 1] + '</span></label>';
+    }).join('');
+    return '<fieldset class="q" data-code="' + s.code + '"><legend><span class="qn">' + n + '</span><span>' + text + '</span></legend>' +
+      '<div class="scale">' + dots + '</div>' +
+      '<div class="ends"><span>Sangat tidak setuju</span><span>Sangat setuju</span></div></fieldset>';
+  }
+  function renderLikert() {
+    if (!state.order) state.order = shuffle(STATEMENTS.slice());
+    var start = pageStart();
+    var slice = state.order.slice(start, start + PAGE_SIZES[state.page]);
+    $('#likert-brand').innerHTML = '<div class="brand-chip">' + logoImg(state.merek) + '</div>';
+    $('#likert-title').textContent = 'Penilaian merek ' + state.merek;
+    $('#likert-lead').textContent = 'Pikirkan ' + state.merek + '. Seberapa setuju Anda dengan setiap pernyataan berikut?';
+    $('#likert-body').innerHTML = slice.map(function (s, i) { return qHTML(s, start + i + 1); }).join('');
+    setErr('likert', '');
+  }
+  function validateLikert() {
+    var start = pageStart();
+    var slice = state.order.slice(start, start + PAGE_SIZES[state.page]);
+    var firstBad = null;
+    slice.forEach(function (s) {
+      var box = $('.q[data-code="' + s.code + '"]');
+      var bad = !state.answers[s.code];
+      box.classList.toggle('invalid', bad);
+      if (bad && !firstBad) firstBad = box;
+    });
+    if (firstBad) {
+      setErr('likert', 'Lengkapi semua pernyataan yang ditandai merah sebelum lanjut.');
+      firstBad.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return false;
+    }
+    setErr('likert', '');
+    return true;
+  }
+
+  /* ============ EVENT: PILIHAN ============ */
+  document.addEventListener('change', function (e) {
+    var t = e.target;
+    if (!t || t.tagName !== 'INPUT') return;
+    var name = t.name;
+
+    if (name === 'usia') {
+      state.usia = t.value; setErr('usia', '');
+      if (t.value === 'Tidak') {
+        openModal('Usia belum memenuhi syarat',
+          'Kuesioner ini hanya dapat diisi oleh responden berusia 17 tahun ke atas.', 'Mengerti',
+          function () { clearRadios('usia'); state.usia = ''; });
+      }
+    } else if (name === 'domisili') {
+      state.domisili = t.value; setErr('domisili', '');
+      if (t.value === 'Tidak') {
+        openModal('Khusus responden di Indonesia',
+          'Kuesioner ini hanya dapat diisi oleh responden yang berdomisili di Indonesia.', 'Mengerti',
+          function () { clearRadios('domisili'); state.domisili = ''; });
+      }
+    } else if (name === 'merek') {
+      setErr('merek', '');
+      if (t.value === NONE_OPTION) {
+        openModal('Terima kasih atas minat Anda',
+          'Kuesioner ini khusus untuk pengguna Skintific, Somethinc, atau Avoskin dalam 6 bulan terakhir.', 'Tutup',
+          function () { show('ended'); });
+      } else {
+        if (state.merek && state.merek !== t.value) state.answers = {}; // ganti merek: nilai lama tidak relevan
+        state.merek = t.value;
+      }
+    } else if (name.indexOf('L-') === 0) {
+      var code = name.slice(2);
+      state.answers[code] = parseInt(t.value, 10);
+      var box = t.closest('.q'); if (box) box.classList.remove('invalid');
+    } else if (/^P[1-6]$/.test(name)) {
+      state.profil[name] = t.value; setErr(name, '');
+    } else if (name === undefined || t.id === 'consent') {
+      setErr('consent', '');
+    }
+  });
+
+  /* ============ EVENT: TOMBOL ============ */
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-action]');
+    if (!b) return;
+    var a = b.getAttribute('data-action');
+
+    if (a === 'start') { show('identity'); }
+
+    else if (a === 'identity-next') {
+      state.nama = $('#nama').value.trim();
+      var ok = true, first = null;
+      if (!state.nama) { setErr('nama', 'Isi nama Anda. Inisial juga boleh.'); ok = false; first = first || $('#nama'); } else setErr('nama', '');
+      if (state.usia !== 'Ya') { setErr('usia', 'Pilih salah satu jawaban. Survei ini untuk usia 17 tahun ke atas.'); ok = false; first = first || $('#grp-usia'); } else setErr('usia', '');
+      if (!$('#consent').checked) { setErr('consent', 'Centang persetujuan untuk melanjutkan.'); ok = false; first = first || $('#consent'); } else setErr('consent', '');
+      if (!ok) { first.scrollIntoView({ behavior: 'smooth', block: 'center' }); return; }
+      if (!state.started) state.started = Date.now();
+      show('screen');
+    }
+
+    else if (a === 'screen-back') { show('identity'); }
+
+    else if (a === 'screen-next') {
+      var good = true, firstEl = null;
+      if (state.domisili !== 'Ya') { setErr('domisili', 'Pilih salah satu jawaban. Survei ini untuk responden di Indonesia.'); good = false; firstEl = firstEl || $('#grp-domisili'); } else setErr('domisili', '');
+      if (BRANDS.indexOf(state.merek) === -1) { setErr('merek', 'Pilih merek yang paling sering Anda pakai.'); good = false; firstEl = firstEl || $('#grp-merek'); } else setErr('merek', '');
+      if (!good) { firstEl.scrollIntoView({ behavior: 'smooth', block: 'center' }); return; }
+      state.page = 0;
+      renderLikert();
+      show('likert');
+    }
+
+    else if (a === 'likert-back') {
+      if (state.page > 0) { state.page--; renderLikert(); show('likert'); }
+      else show('screen');
+    }
+
+    else if (a === 'likert-next') {
+      if (!validateLikert()) return;
+      if (state.page < PAGE_SIZES.length - 1) { state.page++; renderLikert(); show('likert'); }
+      else show('profile');
+    }
+
+    else if (a === 'profile-back') {
+      state.page = PAGE_SIZES.length - 1; renderLikert(); show('likert');
+    }
+
+    else if (a === 'submit') { submit(); }
+  });
+
+  /* ============ KIRIM ============ */
+  function send(payload) {
+    var body = JSON.stringify(payload);
+    var headers = { 'Content-Type': 'text/plain;charset=utf-8' };
+    return fetch(SCRIPT_URL, { method: 'POST', headers: headers, body: body })
+      .then(function (res) { return res.json(); })
+      .then(function (out) {
+        if (out && out.status === 'ok') return true;
+        throw new Error((out && out.message) || 'Server menolak data');
+      })
+      .catch(function (err) {
+        // Gagal karena CORS/jaringan: kirim ulang tanpa membaca respons.
+        // Aman: server mengabaikan ID yang sama, jadi tidak tercatat dobel.
+        if (err instanceof TypeError) {
+          return fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: headers, body: body })
+            .then(function () { return true; });
+        }
+        throw err;
+      });
+  }
+
+  function submit() {
+    var missing = PROFILE.filter(function (p) { return !state.profil[p.code]; });
+    PROFILE.forEach(function (p) { setErr(p.code, state.profil[p.code] ? '' : 'Pilih salah satu jawaban.'); });
+    if (missing.length) {
+      $('#grp-' + missing[0].code).scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    var codes = STATEMENTS.map(function (s) { return s.code; });
+    if (codes.some(function (c) { return !state.answers[c]; })) {
+      setErr('submit', 'Ada pernyataan yang belum dijawab. Tekan Kembali untuk melengkapinya.');
+      return;
+    }
+    if (SCRIPT_URL.indexOf('PASTE_') === 0) {
+      setErr('submit', 'Alamat Apps Script belum diisi. Buka index.html dan isi SCRIPT_URL.');
+      return;
+    }
+
+    var btn = $('#submit-btn');
+    btn.disabled = true; btn.textContent = 'Mengirim\u2026';
+    setErr('submit', '');
+
+    var payload = {
+      id: uid(),
+      nama: state.nama,
+      usia17: state.usia,
+      domisili: state.domisili,
+      consent: true,
+      merek: state.merek,
+      items: state.answers,
+      profil: state.profil,
+      durasi: Math.round((Date.now() - (state.started || Date.now())) / 1000),
+      hp: $('#hp').value
+    };
+
+    send(payload).then(function () {
+      state.sent = true;
+      show('done');
+    }).catch(function (err) {
+      console.error(err);
+      setErr('submit', 'Jawaban belum terkirim. Periksa koneksi internet Anda, lalu tekan Kirim kuesioner lagi.');
+      btn.disabled = false; btn.textContent = 'Kirim kuesioner';
+    });
+  }
+
+  window.addEventListener('beforeunload', function (e) {
+    if (state.started && !state.sent && current !== 'ended') { e.preventDefault(); e.returnValue = ''; }
+  });
+
+  show('landing');
+})();
+</script>
+</body>
+</html>
